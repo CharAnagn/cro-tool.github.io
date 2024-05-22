@@ -1,0 +1,32 @@
+.business-form {
+	width: 100%;
+	max-width: 600px;
+	padding-block-start: 1rem;
+}
+
+input,
+textarea {
+	width: 100%;
+	display: block;
+	margin-block: 0.3rem 1rem;
+}
+
+textarea {
+	min-height: 125px;
+}
+
+.business-form label {
+	display: block;
+	font-size: 0.8rem;
+	color: var(--grey-05);
+}
+
+.form-half {
+	width: 100%;
+	display: flex;
+	gap: 1rem;
+
+	& input {
+		width: 100%;
+	}
+}

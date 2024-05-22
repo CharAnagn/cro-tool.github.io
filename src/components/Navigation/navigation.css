@@ -1,0 +1,25 @@
+.navigation {
+	display: flex;
+	flex-direction: column;
+}
+
+.navigation__link {
+	padding-inline: 0.75rem 0;
+	font-weight: 700;
+	font-size: 1.25rem;
+	color: var(--main-black);
+	text-decoration: none;
+	letter-spacing: -1px;
+	border-bottom: 1px solid var(--main-black);
+	transition: all 250ms ease;
+}
+
+.navigation__link:hover {
+	background-color: var(--main-black);
+	color: var(--main-white);
+}
+
+a.active {
+	background-color: var(--main-black);
+	color: var(--main-white);
+}

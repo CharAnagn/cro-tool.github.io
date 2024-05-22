@@ -1,11 +1,10 @@
 :root {
-	font-family: 'Inter', system-ui, 'Avenir', 'Helvetica', Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+	--main-black: hsl(0, 0%, 20%);
+	--main-white: hsl(0, 0%, 100%);
+	--grey-05: hsl(227, 12%, 30%);
 
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	color: var(--main-black);
+	background-color: var(--main-white);
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -50,13 +49,19 @@ h6 {
 
 /* Regular styles */
 
+html,
 body {
-	min-height: 100vh;
+	height: 100%;
 }
 
 #root {
 	max-width: 1280px;
-	margin: 0 auto;
+	height: 100%;
+	display: grid;
+	grid-template-columns: minmax(185px, 230px) minmax(360px, 1fr);
+	grid-template-rows: 1fr;
 	padding: 2rem;
-	text-align: center;
+	font-family: 'Inter', system-ui, 'Avenir', 'Helvetica', Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
 }
