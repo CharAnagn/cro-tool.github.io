@@ -1,6 +1,25 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import jStat from "jstat";
 import "./Bayesian.css";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface BayesianABTestProps {}
 
@@ -52,6 +71,36 @@ const BayesianABTest: React.FC<BayesianABTestProps> = () => {
     return probBGreaterA / sampleSize;
   };
 
+  const data = {
+    labels: ["Group A", "Group B"],
+    datasets: [
+      {
+        label: `Probability A is better than B: ${(100 - result * 100).toFixed(
+          2
+        )}%`,
+        data: [100 - result * 100, result * 100],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
+        borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+
+    indexAxis: "x",
+    plugins: {
+      legend: {
+        display: true,
+      },
+    },
+  };
+
   return (
     <div className="bayesian-form-wrapper">
       <form onSubmit={handleSubmit}>
@@ -98,7 +147,12 @@ const BayesianABTest: React.FC<BayesianABTestProps> = () => {
         <button type="submit">Calculate</button>
       </form>
       {result !== null && (
-        <p>Probability that B is better than A: {(result * 100).toFixed(2)}%</p>
+        <>
+          <Bar data={data} options={options} />
+          <p>
+            Probability that B is better than A: {(result * 100).toFixed(2)}%
+          </p>
+        </>
       )}
     </div>
   );
