@@ -4,6 +4,12 @@
 	padding-block-start: 1rem;
 }
 
+.report-button {
+  float: right;
+  width: 30%;
+  margin-top: 30px;
+}
+
 input,
 textarea {
 	width: 100%;

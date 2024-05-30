@@ -55,13 +55,39 @@ body {
 }
 
 #root {
-	max-width: 1280px;
+	
 	height: 100%;
-	display: grid;
-	grid-template-columns: minmax(185px, 230px) minmax(360px, 1fr);
+	 /* display: grid; 
+	 grid-template-columns:  minmax(360px, 1fr) minmax(185px, 0.5fr);  */
 	grid-template-rows: 1fr;
-	padding: 2rem;
+	background-color: #ebecf1;
 	font-family: 'Inter', system-ui, 'Avenir', 'Helvetica', Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 }
+
+.page-container {
+  max-width: 1280px;
+  padding: 2rem;
+}
+
+.page-container.c-center {
+  margin: 0 auto;
+}
+
+textarea {
+  resize: none;
+}
+
+@media print {
+  body {
+      -webkit-print-color-adjust: exact;
+      color-adjust: exact; 
+  }
+
+  .text-white {
+      color: #FFFFFF !important; /
+  }
+
+}
+
