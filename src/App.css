@@ -60,7 +60,7 @@ body {
 	 /* display: grid; 
 	 grid-template-columns:  minmax(360px, 1fr) minmax(185px, 0.5fr);  */
 	grid-template-rows: 1fr;
-	background-color: #ebecf1;
+	/* background-color: #ebecf1; */
 	font-family: 'Inter', system-ui, 'Avenir', 'Helvetica', Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
