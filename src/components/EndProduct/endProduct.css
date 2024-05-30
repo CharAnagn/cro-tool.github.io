@@ -1,0 +1,11 @@
+.cro-image-container {
+  position: relative;
+}
+
+.cro-title {
+  color: white;
+  position: absolute;
+  left: 37%;
+  bottom: 15%;
+  z-index: 100;
+}
