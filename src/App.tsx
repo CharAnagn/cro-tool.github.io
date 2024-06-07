@@ -4,21 +4,21 @@ import FormViewer from "./components/FormViewer/FormViewer";
 import EndProduct from "./components/EndProduct/EndProduct";
 import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [isValid, setIsValid] = useState(false);
+  const loading = useSelector((state) => state.form.loading);
   const [reportTitle, setReportTitle] = useState("");
 
   return (
     <BrowserRouter>
-      <div className={`page-container ${isValid ? "c-center" : ""}`}>
-        {isValid ? (
+      <div className={`page-container ${loading ? "c-center" : ""}`}>
+        {loading ? (
           <EndProduct title={reportTitle} />
         ) : (
           <FormViewer
             setReportTitle={setReportTitle}
             reportTitle={reportTitle}
-            isItFinished={setIsValid}
           ></FormViewer>
         )}
       </div>

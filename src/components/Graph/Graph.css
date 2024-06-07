@@ -1,0 +1,19 @@
+.graph-container {
+  margin: 3rem 0;
+}
+
+.graph-text {
+  text-align: center;
+  font-weight: bold;
+}
+
+.graph-text span {
+  text-align: center;
+  font-weight: 400;
+  color: #8492A2;
+}
+
+.graph-text .significant {
+  color: green;
+  font-weight: bold;
+}

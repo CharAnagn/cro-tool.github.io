@@ -8,14 +8,9 @@ import ReportForm from "../Forms/Report/ReportForm";
 interface Props {
   setReportTitle: (title: string) => void;
   reportTitle: string;
-  isItFinished: (finished: boolean) => void;
 }
 
-const FormViewer: React.FC<Props> = ({
-  setReportTitle,
-  reportTitle,
-  isItFinished,
-}) => {
+const FormViewer: React.FC<Props> = ({ setReportTitle, reportTitle }) => {
   return (
     <main className="main">
       <Routes>
@@ -25,7 +20,6 @@ const FormViewer: React.FC<Props> = ({
             <ReportForm
               setReportTitle={setReportTitle}
               reportTitle={reportTitle}
-              isItFinished={isItFinished}
             />
           }
         ></Route>
