@@ -32,5 +32,8 @@ textarea {
 .form-half {
 	display: flex;
 	gap: 1rem;
-	margin-bottom: 1rem;
+}
+
+.bayesian-add-button {
+  margin-bottom: 2rem;
 }

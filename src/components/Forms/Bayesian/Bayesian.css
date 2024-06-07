@@ -1,0 +1,84 @@
+.bayesian-group-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.bayesian-group-wrapper > button {
+  align-self: end;
+
+}
+
+.bayesian-group-wrapper:last-of-type {
+  margin-bottom: 1rem;
+}
+
+
+.bayesian-form-wrapper {
+	display: flex;
+	max-width: 600px;
+	gap: 20px;
+  flex-direction: column;
+}
+
+.bayesian-inputs-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.bayesian-kpi input {
+margin-block: 0;
+margin-top: 5px;
+}
+
+.bayesian-form-wrapper div{
+  width: 100%;
+	flex-basis: 50%;
+}
+
+.control {
+	flex-basis: unset !important;
+	width: 100%;
+}
+
+.results {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.results p {
+	border: 2px solid #33ab9f;
+	background-color: #00695f;
+	color: #ffffff;
+	border-radius: 4px;
+	padding: 0.5rem 3rem;
+}
+
+.results .result {
+	font-weight: 700;
+}
+
+
+.table-container {
+  margin: 20px 0 20px 50px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+}
