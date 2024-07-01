@@ -26,7 +26,7 @@ const BayesianGroup: React.FC<BayesianGroupProps> = ({ index }) => {
   return (
     <div className="bayesian-form-wrapper">
       <TextField
-        label="Main KPI"
+        label={index === 0 ? "Main KPI" : "KPI"}
         variant="outlined"
         fullWidth
         type="text"

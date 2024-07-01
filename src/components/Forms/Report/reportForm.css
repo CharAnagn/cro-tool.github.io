@@ -34,6 +34,31 @@ textarea {
 	gap: 1rem;
 }
 
+
 .bayesian-add-button {
   margin-bottom: 2rem;
+}
+
+.form-images label {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.form-images label input,.form-images label span {
+  cursor: pointer;
+}
+
+.form-images label:hover {
+  background-color: transparent;
+}
+
+.images-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+
+}
+
+.select-input {
+  margin: 10px 0;
 }

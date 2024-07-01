@@ -1,12 +1,16 @@
 .bayesian-group-wrapper {
   margin-top: 1rem;
   display: flex;
-  flex-direction: column;
-
+  flex-direction: row;
+background-color: #EDEDED;
+border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+0 1px 3px rgba(0, 0, 0, 0.08);
+flex-direction: row-reverse;
 }
 
 .bayesian-group-wrapper > button {
-  align-self: end;
+  align-self: start;
 
 }
 

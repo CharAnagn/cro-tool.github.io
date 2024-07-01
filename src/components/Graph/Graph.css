@@ -13,7 +13,11 @@
   color: #8492A2;
 }
 
-.graph-text .significant {
-  color: green;
+.significant {
+  color: green !important;
   font-weight: bold;
+}
+
+.not-significant {
+  color: #8492A2;
 }

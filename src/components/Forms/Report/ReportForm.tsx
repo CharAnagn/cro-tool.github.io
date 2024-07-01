@@ -2,7 +2,20 @@ import React, { useState } from "react";
 import "./reportForm.css";
 import Heading from "../Heading/Heading";
 import CloseIcon from "@mui/icons-material/Close";
-import { Button, TextField, IconButton } from "@mui/material";
+import {
+  Button,
+  TextField,
+  IconButton,
+  Box,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  Select,
+  Typography,
+} from "@mui/material";
+
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateField,
@@ -10,22 +23,22 @@ import {
   updateUplift,
   updateLoading,
   updateText,
+  updateImage,
+  updateSelect,
+  updateStartingDate,
+  updateEndingDate,
+  updateDateDifference,
 } from "../../../features/form/formSlicer";
 import BayesianGroup from "../Bayesian/BayesianGroup";
+import dayjs from "dayjs";
 
 interface ReportFormProps {}
 
 const ReportForm: React.FC<ReportFormProps> = () => {
   const formData = useSelector((state) => state.form.formData);
-  const loading = useSelector((state) => state.form.loading);
 
   const dispatch = useDispatch();
   const [bayesianGroups, setBayesianGroups] = useState([{}]);
-
-  const handleChangeNumber = (e) => {
-    const { name, value } = e.target;
-    dispatch(updateField({ field: name, value }));
-  };
 
   const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,25 +49,68 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     setBayesianGroups([...bayesianGroups, {}]);
   };
 
-  // const [image, setImage] = useState<string | null>(null);
+  const handleChangeSelectLocation = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const selectedOptions = event.target.value as string[];
 
-  // const handleUploadImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files && event.target.files[0];
-  //   const reader = new FileReader();
+    // If any option other than 'Location' is selected, remove 'Location'
+    if (
+      selectedOptions.length > 1 &&
+      selectedOptions.includes("Select location")
+    ) {
+      const index = selectedOptions.indexOf("Select location");
+      selectedOptions.splice(index, 1);
+    } else if (selectedOptions.length < 1) {
+      selectedOptions.push("Select location");
+    }
 
-  //   reader.onload = (upload: ProgressEvent<FileReader>) => {
-  //     if (upload.target && typeof upload.target.result === "string") {
-  //       setImage(upload.target.result);
-  //     }
-  //   };
+    dispatch(
+      updateSelect({ field: "report-location", value: selectedOptions })
+    );
+  };
 
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+  const handleChangeSelectTargeting = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const selectedOptions = event.target.value as string[];
+
+    // If any option other than 'Location' is selected, remove 'Location'
+    if (
+      selectedOptions.length > 1 &&
+      selectedOptions.includes("Select targeting")
+    ) {
+      const index = selectedOptions.indexOf("Select targeting");
+      selectedOptions.splice(index, 1);
+    } else if (selectedOptions.length < 1) {
+      selectedOptions.push("Select targeting");
+    }
+
+    dispatch(
+      updateSelect({ field: "report-targeting", value: selectedOptions })
+    );
+  };
+
+  const handleUploadImage =
+    (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files && event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (upload: ProgressEvent<FileReader>) => {
+        if (upload.target && typeof upload.target.result === "string") {
+          dispatch(updateImage({ key, image: upload.target.result }));
+        }
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    window.scrollTo({ top: 0 });
+
     bayesianGroups.forEach((_, index) => {
       calculateAndDispatchProbability(index);
       calculateUplift(index);
@@ -63,8 +119,6 @@ const ReportForm: React.FC<ReportFormProps> = () => {
         dispatch(updateLoading(true));
       });
     });
-
-    console.log(loading);
   };
 
   const calculateAndDispatchProbability = (index: number) => {
@@ -160,6 +214,46 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     }
   };
 
+  // const { startingDate, endingDate, dayDifference } = useSelector(
+  //   (state) => state.form
+  // );
+
+  // const handleDateChange = (newStartDate, newEndDate) => {
+  //   dispatch(
+  //     updateDates({ startingDate: newStartDate, endingDate: newEndDate })
+  //   );
+  // };
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+  const [dayDifference, setDayDifference] = React.useState(null);
+
+  const handleDateChange = (newStartDate, newEndDate) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    if (newStartDate && newEndDate) {
+      const difference = dayjs(newEndDate).diff(dayjs(newStartDate), "day");
+      const startingDate = newStartDate.format("dddd MMM D YYYY");
+      const endingDate = newEndDate.format("dddd MMM D YYYY");
+
+      dispatch(updateDateDifference(difference));
+      dispatch(updateStartingDate(startingDate));
+      dispatch(updateEndingDate(endingDate));
+    } else {
+      return;
+    }
+  };
+
+  const targetingOptions = ["Desktop", "Mobile", "Tablet", "All Devices"];
+
+  const locationOptions = [
+    "Homepage",
+    "PDP",
+    "PLP",
+    "Cart",
+    "Checkout",
+    "Sitewide",
+  ];
+
   return (
     <>
       <Heading title={"Report data"}></Heading>
@@ -178,6 +272,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           label="Hypothesis"
           variant="outlined"
           multiline
+          type="text"
           margin="dense"
           fullWidth
           name="report-hypothesis"
@@ -188,6 +283,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           label="Changes"
           variant="outlined"
           multiline
+          type="text"
           margin="dense"
           fullWidth
           name="report-changes"
@@ -195,43 +291,198 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           onChange={handleChangeText}
         />
 
-        <div className="form-half">
-          <TextField
-            label="Runtime"
-            variant="outlined"
-            margin="dense"
-            name="report-runtime"
-            value={formData["report-runtime"] || ""}
-            onChange={handleChangeText}
-          />
-          <TextField
-            label="Targeting"
-            variant="outlined"
-            margin="dense"
-            name="report-targeting"
-            id="report-targeting"
-            value={formData["report-targeting"] || ""}
-            onChange={handleChangeText}
-          />
-          <TextField
-            label="Location"
-            variant="outlined"
-            margin="dense"
-            name="report-location"
-            id="report-location"
-            value={formData["report-location"] || ""}
-            onChange={handleChangeText}
-          />
-          <TextField
-            label="Runtime again"
-            variant="outlined"
-            margin="dense"
-            name="report-runtime-again"
-            id="report-runtime-again"
-            value={formData["report-runtime-again"] || ""}
-            onChange={handleChangeText}
-          />
+        <TextField
+          label="Recommendation"
+          variant="outlined"
+          multiline
+          margin="dense"
+          fullWidth
+          name="report-reccomendation"
+          value={formData["report-reccomendation"] || ""}
+          onChange={handleChangeText}
+        />
+
+        <div className="form-images">
+          <h2>Upload images</h2>
+          <div className="images-container">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ marginBottom: "20px" }}
+              >
+                Original Desktop:
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleUploadImage("originalDesktop")}
+                />
+              </Button>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ marginBottom: "20px" }}
+              >
+                Original Mobile:
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleUploadImage("originalMobile")}
+                />
+              </Button>
+            </Box>
+          </div>
+
+          <div className="images-container">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ marginBottom: "20px" }}
+              >
+                Variant Desktop:
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleUploadImage("variantDesktop")}
+                />
+              </Button>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ marginBottom: "20px" }}
+              >
+                Variant Mobile:
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleUploadImage("variantMobile")}
+                />
+              </Button>
+            </Box>
+          </div>
         </div>
+
+        <div className="form-half">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              alignItems="center"
+              width="100%"
+              gap="20px"
+            >
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                width="100%"
+                gap="20px"
+              >
+                <DatePicker
+                  label="Start Date"
+                  value={startDate}
+                  sx={{ width: "100%" }}
+                  onChange={(newValue) => {
+                    handleDateChange(newValue, endDate);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                <DatePicker
+                  label="End Date"
+                  value={endDate}
+                  sx={{ width: "100%" }}
+                  minDate={startDate}
+                  onChange={(newValue) => {
+                    handleDateChange(startDate, newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Box>
+              {dayDifference !== null && (
+                <Typography variant="h6">
+                  Difference: {dayDifference} day{dayDifference !== 1 && "s"}
+                </Typography>
+              )}
+            </Box>
+          </LocalizationProvider>
+        </div>
+        <Select
+          variant="outlined"
+          margin="dense"
+          name="report-targeting"
+          id="report-targeting"
+          multiple
+          value={formData["report-targeting"] || ["Select targeting"]}
+          onChange={handleChangeSelectTargeting}
+          renderValue={(selected) => selected.join(", ")}
+          className="select-input"
+        >
+          {targetingOptions.map((option) => (
+            <MenuItem key={option} value={option}>
+              <Checkbox
+                checked={formData["report-targeting"]?.indexOf(option) > -1}
+              />
+              <ListItemText primary={option} />
+            </MenuItem>
+          ))}
+        </Select>
+
+        <Select
+          variant="outlined"
+          margin="dense"
+          name="report-location"
+          id="report-location"
+          multiple
+          value={formData["report-location"] || ["Select location"]}
+          onChange={handleChangeSelectLocation}
+          renderValue={(selected) => selected.join(", ")}
+          className="select-input"
+        >
+          {locationOptions.map((option) => (
+            <MenuItem key={option} value={option}>
+              <Checkbox
+                checked={formData["report-location"]?.indexOf(option) > -1}
+              />
+              <ListItemText primary={option} />
+            </MenuItem>
+          ))}
+        </Select>
 
         {bayesianGroups.map((_, index) => (
           <div key={index} className="bayesian-group-wrapper">
@@ -253,7 +504,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           variant="outlined"
           color="primary"
         >
-          Add Another Group
+          Add Another KPI
         </Button>
 
         <Button
@@ -262,7 +513,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           id="report-data-submit"
           className="report-button"
         >
-          Next
+          Generate
         </Button>
       </form>
     </>

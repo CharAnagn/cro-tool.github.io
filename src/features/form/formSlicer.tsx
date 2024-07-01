@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FormState {
-  formData: { [key: string]: number | string };
+  formData: { [key: string]: number | string | null };
   probability: string[];
   uplift: { [key: number]: string };
+  startingDate: string;
+  endingDate: string;
   loading: boolean;
   error: string | null;
+  images: { [key: string]: string | null };
+  daysDifference: null | number;
 }
 
 // Interfaces for action payloads
@@ -24,6 +28,11 @@ interface UpdateUpliftPayload {
   uplift: number;
 }
 
+interface UpdateImagePayload {
+  key: string;
+  image: string;
+}
+
 // Initial state using the interface
 const initialState: FormState = {
   formData: {},
@@ -31,6 +40,15 @@ const initialState: FormState = {
   uplift: {},
   loading: false,
   error: null,
+  images: {
+    variantDesktop: null,
+    variantMobile: null,
+    originalDesktop: null,
+    originalMobile: null,
+  },
+  daysDifference: null,
+  startingDate: "",
+  endingDate: "",
 };
 
 export const formSlice = createSlice({
@@ -59,6 +77,23 @@ export const formSlice = createSlice({
     updateLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    updateImage: (state, action: PayloadAction<UpdateImagePayload>) => {
+      const { key, image } = action.payload;
+      state.images[key] = image;
+    },
+    updateSelect: (state, action: PayloadAction<UpdateFieldPayload>) => {
+      const { field, value } = action.payload;
+      state.formData[field] = value;
+    },
+    updateDateDifference: (state, action: PayloadAction<number | null>) => {
+      state.daysDifference = action.payload;
+    },
+    updateStartingDate: (state, action: PayloadAction<string>) => {
+      state.startingDate = action.payload;
+    },
+    updateEndingDate: (state, action: PayloadAction<string>) => {
+      state.endingDate = action.payload;
+    },
   },
 });
 
@@ -68,6 +103,11 @@ export const {
   updateUplift,
   updateLoading,
   updateText,
+  updateImage,
+  updateSelect,
+  updateDateDifference,
+  updateStartingDate,
+  updateEndingDate,
 } = formSlice.actions;
 
 export default formSlice.reducer;

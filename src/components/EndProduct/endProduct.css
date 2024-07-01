@@ -2,6 +2,11 @@
   position: relative;
 }
 
+.cro-image-container img {
+width: 100%;
+}
+
+
 .cro-title {
   color: white;
   position: absolute;

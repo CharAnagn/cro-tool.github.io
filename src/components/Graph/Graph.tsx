@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Graph.css";
 import { Bar } from "react-chartjs-2";
 import {
@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
 
 interface Props {
   percentage: number;
@@ -28,6 +29,11 @@ ChartJS.register(
 );
 
 const Graph: React.FC<Props> = ({ percentage, indexNumber }) => {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
   const inputData = useSelector((state) => state.form);
   const formData = useSelector((state) => state.form.formData);
 
@@ -42,16 +48,12 @@ const Graph: React.FC<Props> = ({ percentage, indexNumber }) => {
   const upliftB = inputData.uplift[indexNumber].replace("%", "");
   const upliftA = ((conversionRateA - conversionRateB) / conversionRateB) * 100;
 
-  console.log(upliftB, "upliftB");
-
-  console.log(indexNumber);
-
   const data = {
     labels: ["Group A", "Group B"],
     datasets: [
       {
         label: [`Probability A is better than B`],
-        data: [(100 - percentage).toFixed(2), percentage],
+        data: inView ? [(100 - percentage).toFixed(2), percentage] : [0, 0],
         backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)"],
         borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 0.2)"],
         borderWidth: 1,
@@ -67,10 +69,12 @@ const Graph: React.FC<Props> = ({ percentage, indexNumber }) => {
       },
     },
     indexAxis: "y",
+    animation: {
+      duration: inView ? 2500 : 0, // Animation duration when in view
+    },
     plugins: {
       legend: {
         display: true,
-
         labels: {
           color: "blue",
           font: {
@@ -117,7 +121,7 @@ const Graph: React.FC<Props> = ({ percentage, indexNumber }) => {
   };
 
   return (
-    <div className="graph-container">
+    <div className="graph-container" ref={ref}>
       <Bar data={data} options={options} />
       <div className="table-container">
         <table>
