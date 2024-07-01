@@ -3,9 +3,9 @@ import "./Details.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
-const Details: React.FC = () => {
-  const data = useSelector((state: RootState) => state.form.formData);
-  const images = useSelector((state: RootState) => state.form.images);
+const Details = () => {
+  const data = useSelector((state) => state.form.formData);
+  const images = useSelector((state) => state.form.images);
 
   const reportTitle = data["report-title"];
   const reportChanges = data["report-changes"];
