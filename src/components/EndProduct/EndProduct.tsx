@@ -5,13 +5,16 @@ import Graph from "../Graph/Graph";
 import { useSelector } from "react-redux";
 import Details from "../Details/Details";
 import ExperimentSummary from "../ExoerimentSummary/ExperimentSummary";
+import { RootState } from "../../store";
 
 interface Props {
   title: string;
 }
 
 const EndProduct: React.FC<Props> = ({ title }) => {
-  const probabilityData = useSelector((state) => state.form.probability);
+  const probabilityData = useSelector(
+    (state: RootState) => state.form.probability
+  );
 
   return (
     <div className="cro-wrapper">
@@ -22,7 +25,7 @@ const EndProduct: React.FC<Props> = ({ title }) => {
 
       <Details />
       <ExperimentSummary />
-      {probabilityData.map((probability: number, index: number) => (
+      {probabilityData.map((probability, index: number) => (
         <Graph percentage={probability} indexNumber={index} key={index} />
       ))}
     </div>

@@ -2,19 +2,26 @@ import "./experimentSummary.css";
 import React from "react";
 import { useSelector } from "react-redux";
 import ResultItem from "../ResultItem/ResultItem";
+import { RootState } from "../../store";
 
 const ExperimentSummary = () => {
-  const probabilityData = useSelector((state) => state.form.probability);
-  const daysDifference = useSelector((state) => state.form.daysDifference);
+  const probabilityData = useSelector(
+    (state: RootState) => state.form.probability
+  );
+  const daysDifference = useSelector(
+    (state: RootState) => state.form.daysDifference
+  );
   const targeting = useSelector(
-    (state) => state.form.formData["report-targeting"]
+    (state: RootState) => state.form.formData["report-targeting"]
   );
   const location = useSelector(
-    (state) => state.form.formData["report-location"]
+    (state: RootState) => state.form.formData["report-location"]
   );
-  const startingDate = useSelector((state) => state.form.startingDate);
+  const startingDate = useSelector(
+    (state: RootState) => state.form.startingDate
+  );
 
-  const endingDate = useSelector((state) => state.form.endingDate);
+  const endingDate = useSelector((state: RootState) => state.form.endingDate);
 
   return (
     <div className="summary-wrapper">
@@ -23,7 +30,7 @@ const ExperimentSummary = () => {
       <div className="summary-container">
         <h3>Results</h3>
         <div className="results-container">
-          {probabilityData.map((probability: number, index: number) => (
+          {probabilityData.map((probability: string, index: number) => (
             <ResultItem
               percentage={probability}
               indexNumber={index}

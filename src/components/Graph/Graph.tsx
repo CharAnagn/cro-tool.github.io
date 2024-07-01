@@ -12,9 +12,10 @@ import {
 } from "chart.js";
 import { useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
+import { RootState } from "../../store";
 
 interface Props {
-  percentage: number;
+  percentage: string;
   indexNumber: number;
   key: number;
 }
@@ -34,8 +35,8 @@ const Graph: React.FC<Props> = ({ percentage, indexNumber }) => {
     threshold: 0.1,
   });
 
-  const inputData = useSelector((state) => state.form);
-  const formData = useSelector((state) => state.form.formData);
+  const inputData = useSelector((state: RootState) => state.form);
+  const formData = useSelector((state: RootState) => state.form.formData);
 
   const usersA = formData[`bayesian-group-a-${indexNumber}`];
   const usersB = formData[`bayesian-group-b-${indexNumber}`];
