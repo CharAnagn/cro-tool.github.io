@@ -5,20 +5,16 @@ import { updateField, updateText } from "../../../features/form/formSlicer";
 
 import { useSelector, useDispatch } from "react-redux";
 
-interface BayesianGroupProps {
-  index: number;
-}
-
-const BayesianGroup: React.FC<BayesianGroupProps> = ({ index }) => {
+const BayesianGroup = ({ index }) => {
   const formData = useSelector((state) => state.form.formData);
   const dispatch = useDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     dispatch(updateField({ field: name, value }));
   };
 
-  const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeText = (e) => {
     const { name, value } = e.target;
     dispatch(updateText({ field: name, value }));
   };
