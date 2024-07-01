@@ -1,4 +1,5 @@
 import "./experimentSummary.css";
+import React from "react";
 import { useSelector } from "react-redux";
 import ResultItem from "../ResultItem/ResultItem";
 
@@ -11,13 +12,10 @@ const ExperimentSummary = () => {
   const location = useSelector(
     (state) => state.form.formData["report-location"]
   );
-  const dateRange = useSelector(
-    (state) => state.form.formData["report-date-range"]
-  );
   const startingDate = useSelector((state) => state.form.startingDate);
 
   const endingDate = useSelector((state) => state.form.endingDate);
-  console.log(startingDate, "startingDate", endingDate, "endingDate");
+
   return (
     <div className="summary-wrapper">
       <h2>Experiment Summary</h2>

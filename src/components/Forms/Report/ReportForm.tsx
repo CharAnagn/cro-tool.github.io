@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./reportForm.css";
+import { RootState, AppDispatch } from "../../../store.tsx";
 import Heading from "../Heading/Heading";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -18,7 +19,6 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  updateField,
   updateProbability,
   updateUplift,
   updateLoading,
@@ -35,9 +35,8 @@ import dayjs from "dayjs";
 interface ReportFormProps {}
 
 const ReportForm: React.FC<ReportFormProps> = () => {
-  const formData = useSelector((state) => state.form.formData);
-
-  const dispatch = useDispatch();
+  const formData = useSelector((state: RootState) => state.form.formData);
+  const dispatch: AppDispatch = useDispatch();
   const [bayesianGroups, setBayesianGroups] = useState([{}]);
 
   const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,9 +64,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
       selectedOptions.push("Select location");
     }
 
-    dispatch(
-      updateSelect({ field: "report-location", value: selectedOptions })
-    );
+    dispatch(updateSelect({ field: "report-location", value: any }));
   };
 
   const handleChangeSelectTargeting = (
@@ -223,9 +220,9 @@ const ReportForm: React.FC<ReportFormProps> = () => {
   //     updateDates({ startingDate: newStartDate, endingDate: newEndDate })
   //   );
   // };
-  const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
-  const [dayDifference, setDayDifference] = React.useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [dayDifference, setDayDifference] = useState(null);
 
   const handleDateChange = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);

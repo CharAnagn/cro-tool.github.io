@@ -15,7 +15,7 @@ interface FormState {
 // Interfaces for action payloads
 interface UpdateFieldPayload {
   field: string;
-  value: number | string;
+  value: number | string | string[];
 }
 
 interface UpdateProbabilityPayload {

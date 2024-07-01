@@ -5,7 +5,13 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"], // Add typeRoots
+    "baseUrl": "./", // Optional: helps with module resolution
+    "paths": {
+      "*": ["src/*"] // Optional: helps with module resolution
+    }
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "src/**/*"], // Include all source files and config
+  "exclude": ["node_modules", "dist"] // Optional: exclude these directories
 }
