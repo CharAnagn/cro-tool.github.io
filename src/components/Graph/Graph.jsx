@@ -12,13 +12,6 @@ import {
 } from "chart.js";
 import { useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
-import { RootState } from "../../store";
-
-interface Props {
-  percentage: string;
-  indexNumber: number;
-  key: number;
-}
 
 ChartJS.register(
   CategoryScale,
@@ -29,14 +22,14 @@ ChartJS.register(
   Legend
 );
 
-const Graph: React.FC<Props> = ({ percentage, indexNumber }) => {
+const Graph = ({ percentage, indexNumber }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
-  const inputData = useSelector((state: RootState) => state.form);
-  const formData = useSelector((state: RootState) => state.form.formData);
+  const inputData = useSelector((state) => state.form);
+  const formData = useSelector((state) => state.form.formData);
 
   const usersA = formData[`bayesian-group-a-${indexNumber}`];
   const usersB = formData[`bayesian-group-b-${indexNumber}`];

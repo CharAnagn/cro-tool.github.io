@@ -2,12 +2,7 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 
-interface Props {
-  percentage: number;
-  indexNumber: number;
-}
-
-const ResultItem: React.FC<Props> = ({ percentage, indexNumber }) => {
+const ResultItem = ({ percentage, indexNumber }) => {
   const inputData = useSelector((state) => state.form);
   const formData = useSelector((state) => state.form.formData);
   const kpi = formData[`bayesian-kpi-${indexNumber}`];

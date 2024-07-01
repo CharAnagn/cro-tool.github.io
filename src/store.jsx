@@ -5,8 +5,6 @@ export const store = configureStore({
   reducer: { form: formReducer },
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// Note: Removing TypeScript-specific types
 
 export default store;

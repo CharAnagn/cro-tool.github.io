@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./reportForm.css";
-import { RootState, AppDispatch } from "../../../store.tsx";
-import Heading from "../Heading/Heading";
+import Heading from "../Heading/Heading.tsx";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
@@ -28,18 +27,16 @@ import {
   updateStartingDate,
   updateEndingDate,
   updateDateDifference,
-} from "../../../features/form/formSlicer";
-import BayesianGroup from "../Bayesian/BayesianGroup";
+} from "../../../features/form/formSlicer.js";
+import BayesianGroup from "../Bayesian/BayesianGroup.tsx";
 import dayjs from "dayjs";
 
-interface ReportFormProps {}
-
-const ReportForm: React.FC<ReportFormProps> = () => {
-  const formData = useSelector((state: RootState) => state.form.formData);
-  const dispatch: AppDispatch = useDispatch();
+const ReportForm = () => {
+  const formData = useSelector((state) => state.form.formData);
+  const dispatch = useDispatch();
   const [bayesianGroups, setBayesianGroups] = useState([{}]);
-
-  const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log(formData, "formData");
+  const handleChangeText = (e) => {
     const { name, value } = e.target;
     dispatch(updateText({ field: name, value }));
   };
@@ -48,39 +45,37 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     setBayesianGroups([...bayesianGroups, {}]);
   };
 
-  const handleChangeSelectLocation = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    const selectedOptions = event.target.value as string[];
+  const handleChangeSelectLocation = (e) => {
+    let selectedOptions = e.target.value;
 
-    // If any option other than 'Location' is selected, remove 'Location'
     if (
+      selectedOptions &&
       selectedOptions.length > 1 &&
       selectedOptions.includes("Select location")
     ) {
       const index = selectedOptions.indexOf("Select location");
       selectedOptions.splice(index, 1);
     } else if (selectedOptions.length < 1) {
-      selectedOptions.push("Select location");
+      selectedOptions = ["Select location"];
     }
 
-    dispatch(updateSelect({ field: "report-location", value: any }));
+    dispatch(
+      updateSelect({ field: "report-location", value: selectedOptions })
+    );
   };
 
-  const handleChangeSelectTargeting = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    const selectedOptions = event.target.value as string[];
+  const handleChangeSelectTargeting = (e) => {
+    let selectedOptions = e.target.value;
 
-    // If any option other than 'Location' is selected, remove 'Location'
     if (
+      selectedOptions &&
       selectedOptions.length > 1 &&
       selectedOptions.includes("Select targeting")
     ) {
       const index = selectedOptions.indexOf("Select targeting");
       selectedOptions.splice(index, 1);
     } else if (selectedOptions.length < 1) {
-      selectedOptions.push("Select targeting");
+      selectedOptions = ["Select targeting"];
     }
 
     dispatch(
@@ -88,21 +83,20 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     );
   };
 
-  const handleUploadImage =
-    (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files && event.target.files[0];
-      const reader = new FileReader();
+  const handleUploadImage = (key) => (event) => {
+    const file = event.target.files && event.target.files[0];
+    const reader = new FileReader();
 
-      reader.onload = (upload: ProgressEvent<FileReader>) => {
-        if (upload.target && typeof upload.target.result === "string") {
-          dispatch(updateImage({ key, image: upload.target.result }));
-        }
-      };
-
-      if (file) {
-        reader.readAsDataURL(file);
+    reader.onload = (upload) => {
+      if (upload.target && typeof upload.target.result === "string") {
+        dispatch(updateImage({ key, image: upload.target.result }));
       }
     };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -118,7 +112,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     });
   };
 
-  const calculateAndDispatchProbability = (index: number) => {
+  const calculateAndDispatchProbability = (index) => {
     const usersA = formData[`bayesian-group-a-${index}`];
     const usersB = formData[`bayesian-group-b-${index}`];
     const conversionsA = formData[`bayesian-conversions-group-a-${index}`];
@@ -135,7 +129,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     }
   };
 
-  const calculateUplift = (index: number) => {
+  const calculateUplift = (index) => {
     const usersA = formData[`bayesian-group-a-${index}`];
     const usersB = formData[`bayesian-group-b-${index}`];
     const conversionsA = formData[`bayesian-conversions-group-a-${index}`];
@@ -149,12 +143,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     dispatch(updateUplift({ index, uplift }));
   };
 
-  const calculateProbability = (
-    usersA: number,
-    usersB: number,
-    conversionsA: number,
-    conversionsB: number
-  ) => {
+  const calculateProbability = (usersA, usersB, conversionsA, conversionsB) => {
     const alphaPrior = 1;
     const betaPrior = 1;
     const alphaA = alphaPrior + conversionsA;
@@ -203,7 +192,7 @@ const ReportForm: React.FC<ReportFormProps> = () => {
     return probBGreaterA / sampleSize;
   };
 
-  const removeBayesianGroup = (index: number) => {
+  const removeBayesianGroup = (index) => {
     if (bayesianGroups.length > 1) {
       const newGroups = [...bayesianGroups];
       newGroups.splice(index, 1);
@@ -445,7 +434,11 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           name="report-targeting"
           id="report-targeting"
           multiple
-          value={formData["report-targeting"] || ["Select targeting"]}
+          value={
+            formData["report-targeting"].length > 0
+              ? formData["report-targeting"]
+              : ["Select targeting"]
+          }
           onChange={handleChangeSelectTargeting}
           renderValue={(selected) => selected.join(", ")}
           className="select-input"
@@ -466,7 +459,11 @@ const ReportForm: React.FC<ReportFormProps> = () => {
           name="report-location"
           id="report-location"
           multiple
-          value={formData["report-location"] || ["Select location"]}
+          value={
+            formData["report-location"].length > 0
+              ? formData["report-location"]
+              : ["Select location"]
+          }
           onChange={handleChangeSelectLocation}
           renderValue={(selected) => selected.join(", ")}
           className="select-input"

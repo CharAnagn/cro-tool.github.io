@@ -6,12 +6,7 @@ import ReportForm from "../Forms/Report/ReportForm";
 // import TestForm from "../Forms/Test/TestForm";
 // import BusinessForm from "../Forms/Business/BusinessForm";
 
-interface Props {
-  setReportTitle: (title: string) => void;
-  reportTitle: string;
-}
-
-const FormViewer: React.FC<Props> = ({ setReportTitle, reportTitle }) => {
+const FormViewer = ({ setReportTitle, reportTitle }) => {
   return (
     <main className="main">
       <Routes>
